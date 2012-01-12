@@ -94,8 +94,13 @@ namespace AE.Net.Mail {
     }
 
     protected virtual void SendCommand(string command) {
-      byte[] data = System.Text.Encoding.Default.GetBytes(command + "\r\n");
-      _Stream.Write(data, 0, data.Length);
+        try
+        {
+            byte[] data = System.Text.Encoding.Default.GetBytes(command + "\r\n");
+            _Stream.Write(data, 0, data.Length);
+        }
+        catch (ObjectDisposedException) //Hack until we can resolve the race condition on disconnect
+        { }
     }
 
     protected string SendCommandGetResponse(string command) {
