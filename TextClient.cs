@@ -125,18 +125,20 @@ namespace AE.Net.Mail {
       _Responses.CompleteAdding();
       if (_Stream != null) {
         _Stream.Dispose();
+        _Stream = null;
       }
       if (!_ReadThread.Join(2000)) {
         _ReadThread.Abort();
       }
     }
 
-    public void Dispose() {
+    public void Dispose()
+    {
+        Disconnect();
+
       try {
         OnDispose();
       } catch (Exception) { }
-
-      Disconnect();
 
       IsDisposed = true;
       _Stream = null;
